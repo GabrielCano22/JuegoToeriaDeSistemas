@@ -1,61 +1,175 @@
-# JuegoToeriaDeSistemas · Misión Decisiones
+# Misión Decisiones
 
-Juego de preguntas en vivo para ocho equipos y un anfitrión. Cada estudiante entra sin cuenta; su puntuación individual se promedia con la de su equipo. La aplicación incluye las cuatro preguntas proporcionadas y dos adicionales, lectura previa sin reloj, consulta del escenario, seis rondas, podio y descarga CSV.
+**Un juego de preguntas multijugador para aprender, tomar decisiones y competir en equipo.**
 
-## Antes de comenzar
+[Jugar en línea](https://mision-decisiones.vercel.app) · [Cómo jugar](#cómo-jugar) · [Puntuación y notas](#puntuación-y-notas) · [Configuración](#configuración-y-despliegue)
 
-- Necesitas un proyecto de Supabase y una cuenta de Vercel. Los participantes necesitan conexión a internet.
-- **No compartas ni subas claves secretas.** No incluyas `.env`, `.env.local` ni credenciales en Git. La clave de servicio solo debe configurarse en el servidor, nunca con prefijo `VITE_`.
-- El servidor usa la clave de servicio de Supabase. Cualquier persona que la obtenga tendrá acceso amplio al proyecto: usa preferiblemente un proyecto dedicado y conserva la clave únicamente en las variables de entorno de Vercel.
+---
 
-## 1. Preparar la base de datos
+## Acerca del proyecto
 
-1. En Supabase crea un proyecto o selecciona uno existente.
-2. Abre **SQL Editor**, crea una consulta y pega todo el contenido de `supabase.sql`. Ejecútalo.
-3. El script crea las tablas `quiz_games`, `quiz_players`, `quiz_answers` y la función `quiz_submit`. No crea permisos públicos: la API del servidor accede usando la clave de servicio. No ejecutes este script sobre otras tablas con esos nombres si ya existen.
-4. Copia la URL del proyecto y la clave secreta `service_role` desde los ajustes/API de Supabase. Según la versión del panel, las claves antiguas pueden aparecer en **Legacy API keys**. Usa la clave `service_role`, no la clave pública `anon`.
+Misión Decisiones es una actividad educativa desarrollada para la asignatura **Teoría de Sistemas**, a partir de una presentación sobre políticas y decisiones basada en material de Sterman (2000) y en el curso de Dinámica de Sistemas de la Universidad Nacional de Colombia, sede Medellín.
 
-## 2. Publicar en Vercel
+El equipo anfitrión dirige una partida en vivo mientras los integrantes de los equipos participantes responden desde sus propios dispositivos. Cada persona acumula puntos individualmente y el resultado del equipo se calcula mediante un promedio, de modo que los equipos con diferente número de integrantes puedan competir en igualdad de condiciones.
 
-1. Sube esta carpeta a un repositorio privado de GitHub, sin archivos `.env` ni credenciales. Importa ese repositorio desde Vercel. Si la carpeta está dentro de un repositorio mayor, selecciona `Juego` como **Root Directory**.
-2. Selecciona el framework **Vite** si Vercel no lo detecta automáticamente. El comando de compilación es `npm run build` y el directorio de salida es `dist`.
-3. En **Environment Variables** configura, para el entorno de producción:
-   - `SUPABASE_URL`: URL del proyecto de Supabase.
-   - `SUPABASE_SERVICE_ROLE_KEY`: clave secreta `service_role`.
-   - `HOST_PASSWORD`: contraseña larga y única para crear partidas. Compártela solo con los anfitriones.
-4. Despliega. Si agregas o cambias variables después de desplegar, vuelve a desplegar para que estén disponibles.
-5. Abre el dominio HTTPS asignado por Vercel y crea una sala como anfitrión. Comparte el QR o el enlace y el PIN. El enlace del QR ya incluye el PIN.
+La actividad está preparada para **ocho equipos participantes**, un equipo anfitrión y seis preguntas. No se requieren cuentas para jugar.
 
-También puedes utilizar Vercel CLI para desplegar; sigue sus instrucciones para iniciar sesión en tu propio dispositivo. No envíes contraseñas ni tokens por chat.
+## Funcionalidades
 
-## 3. Realizar la actividad
+- **Partidas en vivo:** acceso mediante enlace, código QR o PIN, sin necesidad de compartir la misma red.
+- **Personajes personalizables:** selección de personaje, colores, ropa, sombreros y lentes.
+- **Control del anfitrión:** creación de salas, revisión de participantes, inicio y avance de las rondas.
+- **Lectura accesible:** cada escenario se presenta sin temporizador y puede consultarse nuevamente durante la pregunta.
+- **Cierre automático:** la ronda termina cuando todos han respondido o cuando se agota el tiempo.
+- **Música dinámica:** secuencia original en el dispositivo del anfitrión, con mayor ritmo durante los últimos diez segundos y opción de silencio.
+- **Clasificación colectiva:** puntuación individual, promedio por equipo, empates compartidos y podio final.
+- **Informes descargables:** Excel editable con estilos y filtros, y PDF listo para compartir o imprimir.
+- **Reconexión:** recuperación de la sesión en el mismo navegador si la página se recarga.
+- **Diseño adaptable:** vistas para el computador del anfitrión y los dispositivos de los participantes.
 
-1. El anfitrión entra con `HOST_PASSWORD`, crea la sala y proyecta el PIN y el QR.
-2. Los participantes escriben nombre, seleccionan equipo 1–8 y eligen personaje y color. En la sala de espera, el anfitrión puede retirar una inscripción errónea pulsando sobre su tarjeta. No se pueden retirar jugadores después de empezar, para no alterar los promedios.
-3. Al comenzar se muestra el escenario sin reloj. El anfitrión elige el tiempo y abre las respuestas. La pregunta permanece visible y el botón **Volver a leer el escenario** permite consultar el texto.
-4. Una respuesta enviada no se puede cambiar. La ronda se cierra automáticamente cuando todos responden o se agota el tiempo; el anfitrión también puede cerrarla antes. Se muestra la respuesta y la explicación, y el anfitrión avanza. Los jugadores desconectados siguen contando hasta que termine el tiempo.
-5. El podio muestra los equipos con participantes; la tabla muestra los ocho equipos y permite consultar sus integrantes. El anfitrión puede descargar los resultados como Excel o PDF.
+## Tecnologías
 
-Durante las respuestas, el dispositivo del anfitrión reproduce una secuencia musical original generada en el navegador; se acelera en los últimos 10 segundos y se detiene al cerrar la ronda. El botón de música permite silenciarla. Si el navegador bloquea el audio o se recarga la página, pulsa el botón para activarlo. Conecta el computador del anfitrión a los parlantes y comprueba el volumen antes de comenzar; los celulares de los jugadores no reproducen la música.
+| Área | Herramientas |
+| --- | --- |
+| Interfaz | React y Vite |
+| Servidor | Funciones de Vercel para Node.js |
+| Base de datos | Supabase y PostgreSQL |
+| Archivos | ExcelJS, jsPDF y jsPDF-AutoTable |
+| Recursos adicionales | Web Audio API, SVG y códigos QR |
 
-### Puntos y empates
+La aplicación sincroniza el estado mediante **consultas periódicas** a la API; no utiliza Supabase Realtime ni WebSockets. Puede existir una pequeña demora visual entre dispositivos.
 
-El servidor calcula **de 500 a 1.000 puntos** por respuesta correcta: 1.000 al inicio y una reducción lineal hasta 500 al final. Respuesta incorrecta, no enviada o recibida después del límite: 0. No hay bono de racha. Se utiliza la hora de recepción en el servidor; la latencia de cada conexión puede influir ligeramente.
+## Cómo jugar
 
-El puntaje de equipo es el promedio de los puntos acumulados por todos sus integrantes activos, redondeado al entero más cercano. Un jugador que se desconecte después de empezar sigue contando, incluso si no responde. Los equipos sin integrantes no compiten ni reciben nota. Los equipos empatados en puntos redondeados comparten posición y nota; se usa clasificación de competición: por ejemplo, 1.º, 1.º, 3.º. El podio incluye a todos los equipos que ocupan las tres primeras posiciones.
+### Anfitrión
 
-La nota base por posición es: 1.º **5,0**, 2.º **4,8**, 3.º **4,7**, 4.º **4,6**, 5.º **4,5**, 6.º **4,4**, 7.º **4,2** y 8.º **4,0**. Se aplica también un máximo según el promedio del equipo, incluso para el primer lugar: desde 2.000 puntos, sin límite adicional; de 1.500 a 1.999, **3,9**; de 1.000 a 1.499, **3,7**; de 500 a 999, **3,5**; de 1 a 499, **3,2**; y con 0 puntos, **3,0**. La nota final es la menor entre la nota base y ese límite.
+1. Abre la [aplicación](https://mision-decisiones.vercel.app), selecciona **Soy anfitrión** e introduce la clave configurada.
+2. Proyecta el PIN o el código QR y espera a que los participantes ingresen.
+3. Verifica los nombres y equipos. Puedes retirar una inscripción incorrecta desde la sala de espera, antes de comenzar.
+4. Inicia la partida y presenta cada escenario sin temporizador. Cuando todos estén listos, selecciona el tiempo e inicia las respuestas.
+5. Revisa la respuesta correcta y la explicación al cerrar cada ronda; después, avanza a la siguiente pregunta.
+6. Al finalizar, consulta el podio y descarga los resultados en Excel o PDF.
 
-El Excel contiene una hoja de resumen y otra con una fila por integrante; es editable y dispone de filtros. El PDF ofrece el mismo resumen y detalle para compartir o imprimir. Ambos incluyen posición, equipo, promedio, nota colectiva, nombre y puntos individuales; los equipos sin participantes aparecen sin posición ni nota. Las notas se calculan al descargar los resultados finales; no son notas individuales.
+La música se reproduce únicamente en el dispositivo del anfitrión. Si el navegador la bloquea o se recarga la página, utiliza el botón de sonido para activarla. Es recomendable comprobar el volumen y los parlantes antes de la actividad.
 
-### Conexión y privacidad
+### Participantes
 
-La interfaz consulta el estado cada 1,5 segundos a través de una función de Vercel y Supabase; no se requiere que todos estén en la misma red. El reloj y el puntaje se validan en el servidor. La respuesta correcta no se entrega a la interfaz hasta el cierre de la ronda. Cada dispositivo guarda su acceso en el almacenamiento local para volver a la partida tras una recarga; borrar los datos del navegador o cambiar de dispositivo impide esa reconexión automática. Un jugador retirado deja de tener acceso. Los anfitriones también recuperan su sesión en el mismo navegador; quien tenga acceso a ese navegador podría controlarla.
+1. Entra mediante el enlace o el QR compartido por el anfitrión.
+2. Introduce el PIN si es necesario, escribe tu nombre, personaliza tu personaje y selecciona tu equipo.
+3. Lee cada escenario y responde dentro del tiempo establecido. Si lo necesitas, utiliza **Volver a leer el escenario**.
+4. Una vez enviada, la respuesta no se puede modificar. Al finalizar cada ronda se muestra la respuesta correcta.
 
-No existe verificación de identidad ni un mecanismo para impedir que una persona se una dos veces: supervisa los nombres y equipos antes de empezar. El enlace y el PIN no son secretos. No incluyas información personal sensible en los nombres. Las partidas y los resultados permanecen guardados en Supabase hasta que un administrador los elimine. Protege y elimina esos datos según las necesidades de la institución. Las tablas tienen RLS y no hay políticas de acceso público; la API requiere las credenciales de sala para consultar los datos. Para despliegues públicos de largo plazo se recomienda añadir límites de solicitudes, caducidad y limpieza automática de partidas.
+Si alguien se desconecta y no responde, la ronda no espera indefinidamente: termina cuando se agota el tiempo o el anfitrión la cierra. Los participantes desconectados siguen contando para el promedio de su equipo.
 
-## Desarrollo y pruebas
+## Puntuación y notas
 
-Instala Node.js y ejecuta `npm install`. Para compilar: `npm run build`. `npm run dev` inicia únicamente Vite y **no** ejecuta la API de Vercel; para probar el flujo completo localmente, configura un archivo `.env.local` basado en `.env.example` y usa `vercel dev` con Vercel CLI. No subas ese archivo.
+### Puntos individuales y colectivos
 
-Antes de la presentación, prueba una partida completa con varios celulares y redes distintas, comprueba QR, lectura, tiempo, reconexión, puntajes, podio y descargas de Excel y PDF. Verifica los límites vigentes de Vercel y Supabase para el número esperado de participantes y solicitudes. La implementación no incluye actualizaciones Supabase Realtime: usa consultas periódicas, por lo que puede haber una pequeña demora visible.
+- Una respuesta correcta otorga entre **500 y 1.000 puntos**, según la rapidez. El puntaje disminuye linealmente desde 1.000 al inicio hasta 500 al final.
+- Una respuesta incorrecta, no enviada o recibida fuera de tiempo otorga **0 puntos**. No hay bono por racha.
+- El servidor valida el tiempo de recepción; la latencia de la conexión puede influir ligeramente.
+- El puntaje de cada equipo es el **promedio de los puntos acumulados por sus integrantes activos**, redondeado al entero más cercano.
+- Los equipos empatados en puntos redondeados comparten posición y nota. Se usa clasificación de competición: por ejemplo, **1.º, 1.º, 3.º**. Los equipos sin integrantes no compiten ni reciben nota.
+
+### Nota base por posición
+
+| Posición | Nota base | Posición | Nota base |
+| --- | ---: | --- | ---: |
+| 1.º | 5,0 | 5.º | 4,5 |
+| 2.º | 4,8 | 6.º | 4,4 |
+| 3.º | 4,7 | 7.º | 4,2 |
+| 4.º | 4,6 | 8.º | 4,0 |
+
+La nota final es la **menor** entre la nota base y el límite aplicable según el puntaje promedio del equipo:
+
+| Puntos promedio | Nota máxima permitida |
+| --- | ---: |
+| 2.000 o más | Sin límite adicional |
+| 1.500–1.999 | 3,9 |
+| 1.000–1.499 | 3,7 |
+| 500–999 | 3,5 |
+| 1–499 | 3,2 |
+| 0 | 3,0 |
+
+El límite se aplica también al primer lugar. La nota es **colectiva**, no individual. El Excel y el PDF incluyen posición, equipo, promedio, nota, integrantes y puntos individuales; los equipos sin participantes aparecen sin posición ni nota.
+
+## Estructura del proyecto
+
+```text
+Juego/
+├── api/                         # API de la partida para Vercel
+├── public/                      # Favicon, iconos y manifiesto web
+├── src/                         # Interfaz, personajes, música e informes
+├── supabase/                    # Actualización SQL para instalaciones existentes
+├── tests/                       # Pruebas de puntuación e informes
+├── questions.js                 # Escenarios, preguntas y respuestas
+├── scores.js                    # Clasificación y cálculo de notas
+├── supabase.sql                 # Esquema y función de la base de datos
+├── .env.example                 # Nombres de las variables necesarias
+└── vercel.json                  # Configuración de rutas
+```
+
+## Desarrollo local
+
+### Requisitos
+
+- Node.js 20 o posterior y npm.
+- Un proyecto de Supabase configurado para el juego.
+- Vercel CLI para ejecutar la interfaz y la API juntas en local.
+
+```bash
+npm install
+npm run build
+npm test
+```
+
+`npm run dev` inicia únicamente la interfaz de Vite; **no ejecuta la API**. Para probar una partida completa en local, configura un archivo `.env.local` a partir de `.env.example` y ejecuta `vercel dev` con Vercel CLI. La API necesita acceso a Supabase.
+
+## Configuración y despliegue
+
+### 1. Preparar Supabase
+
+1. Crea o selecciona un proyecto de Supabase, preferiblemente dedicado al juego.
+2. En **SQL Editor**, ejecuta el contenido de `supabase.sql`.
+3. El script crea las tablas `quiz_games`, `quiz_players`, `quiz_answers` y la función `quiz_submit`. Antes de ejecutarlo, verifica que el proyecto no tenga tablas existentes con esos nombres que deban conservarse.
+4. Obtén la URL del proyecto y su clave secreta **`service_role`** desde los ajustes de API. En algunas versiones del panel puede aparecer en **Legacy API keys**.
+
+Para una instalación anterior que ya tenga el esquema inicial, `supabase/close_when_answered.sql` actualiza la función de envío para habilitar el cierre automático cuando todos responden.
+
+### 2. Configurar Vercel
+
+Importa el repositorio en Vercel o despliega mediante Vercel CLI. Si el proyecto se encuentra dentro de un repositorio más grande, selecciona la carpeta `Juego` como directorio raíz.
+
+| Ajuste | Valor |
+| --- | --- |
+| Framework | Vite |
+| Comando de compilación | `npm run build` |
+| Directorio de salida | `dist` |
+
+Configura estas variables de entorno en el servidor de Vercel:
+
+| Variable | Propósito |
+| --- | --- |
+| `SUPABASE_URL` | URL del proyecto de Supabase. |
+| `SUPABASE_SERVICE_ROLE_KEY` | Clave secreta `service_role`, utilizada exclusivamente por la API. |
+| `HOST_PASSWORD` | Clave para crear partidas como anfitrión. |
+
+Usa una clave de anfitrión larga y única. Si modificas variables después de un despliegue, vuelve a desplegar para aplicarlas. La conexión del repositorio a Vercel es necesaria si se desean despliegues automáticos con cada cambio; de lo contrario, se puede desplegar manualmente con Vercel CLI.
+
+## Seguridad y privacidad
+
+> **Nunca incluyas contraseñas, tokens ni claves de servicio en el repositorio o en el código del navegador.** La clave `service_role` tiene acceso amplio a Supabase y debe permanecer exclusivamente en el servidor; no debe utilizar el prefijo `VITE_`.
+
+- Las tablas usan RLS y no tienen políticas de acceso público; la API opera desde el servidor con la clave de servicio.
+- El PIN y el enlace de la sala no son secretos. La aplicación no verifica la identidad ni impide que una persona se inscriba varias veces: el anfitrión debe revisar los participantes antes de comenzar.
+- La sesión se conserva en el almacenamiento local del navegador. Borrar sus datos o cambiar de dispositivo impide la reconexión automática; quien tenga acceso al navegador del anfitrión podría controlar su sesión.
+- No se deben utilizar datos sensibles como nombres. Las partidas y resultados permanecen en Supabase hasta que un administrador los elimine.
+- Para un despliegue público permanente se recomienda añadir límites de solicitudes, caducidad de salas y limpieza automática de datos.
+
+## Antes de la actividad
+
+Realiza una partida de prueba con varios dispositivos y conexiones diferentes. Comprueba el QR, el sonido, los tiempos, la reconexión, los puntajes, el podio y las descargas de Excel y PDF. También conviene revisar los límites vigentes de los planes de Vercel y Supabase para la cantidad prevista de participantes.
+
+---
+
+Proyecto académico para la actividad del **Equipo 9 · Teoría de Sistemas**.
