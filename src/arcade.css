@@ -1,0 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Martian+Mono:wght@500;700&family=Pixelify+Sans:wght@500;700&display=swap');
+:root,body,button,input,select{font-family:'Atkinson Hyperlegible',sans-serif}
+h1,h2,h3,.brand,.brand-icon,.kicker,.eyebrow,.creator-title,.option-letter,.check{font-family:'Pixelify Sans',sans-serif}
+.hero h1,.lobby-intro h1,.waiting h1,.final-title h1,.reading h1,.question-header h1,.result-intro h1,.entry h2,.section-heading h2,.leaderboard h2,.brand,.brand-icon,.kicker,.eyebrow,.option-letter,.creator-title{font-family:'Pixelify Sans',sans-serif}
+.pin,.timer,.rank,.ranking strong,.podium-place strong,.personal,.game-meta .pill{font-family:'Martian Mono',monospace;font-variant-numeric:tabular-nums}
+.shell.shell-join{display:block;max-width:1050px;padding:35px 0 60px}
+@media(max-width:700px){.shell.shell-join{width:94%;padding:18px 0 40px}}
+@media(max-height:550px) and (orientation:landscape){.shell.shell-join{padding-top:15px}}
