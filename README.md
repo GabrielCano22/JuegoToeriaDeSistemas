@@ -34,7 +34,7 @@ También puedes utilizar Vercel CLI para desplegar; sigue sus instrucciones para
 2. Los participantes escriben nombre, seleccionan equipo 1–8 y eligen personaje y color. En la sala de espera, el anfitrión puede retirar una inscripción errónea pulsando sobre su tarjeta. No se pueden retirar jugadores después de empezar, para no alterar los promedios.
 3. Al comenzar se muestra el escenario sin reloj. El anfitrión elige el tiempo y abre las respuestas. La pregunta permanece visible y el botón **Volver a leer el escenario** permite consultar el texto.
 4. Una respuesta enviada no se puede cambiar. La ronda se cierra automáticamente cuando todos responden o se agota el tiempo; el anfitrión también puede cerrarla antes. Se muestra la respuesta y la explicación, y el anfitrión avanza. Los jugadores desconectados siguen contando hasta que termine el tiempo.
-5. El podio muestra los equipos con participantes; la tabla muestra los ocho equipos y permite consultar sus integrantes. El anfitrión puede descargar los resultados en CSV.
+5. El podio muestra los equipos con participantes; la tabla muestra los ocho equipos y permite consultar sus integrantes. El anfitrión puede descargar los resultados como Excel o PDF.
 
 Durante las respuestas, el dispositivo del anfitrión reproduce una secuencia musical original generada en el navegador; se acelera en los últimos 10 segundos y se detiene al cerrar la ronda. El botón de música permite silenciarla. Si el navegador bloquea el audio o se recarga la página, pulsa el botón para activarlo. Conecta el computador del anfitrión a los parlantes y comprueba el volumen antes de comenzar; los celulares de los jugadores no reproducen la música.
 
@@ -46,7 +46,7 @@ El puntaje de equipo es el promedio de los puntos acumulados por todos sus integ
 
 La nota base por posición es: 1.º **5,0**, 2.º **4,8**, 3.º **4,7**, 4.º **4,6**, 5.º **4,5**, 6.º **4,4**, 7.º **4,2** y 8.º **4,0**. Se aplica también un máximo según el promedio del equipo, incluso para el primer lugar: desde 2.000 puntos, sin límite adicional; de 1.500 a 1.999, **3,9**; de 1.000 a 1.499, **3,7**; de 500 a 999, **3,5**; de 1 a 499, **3,2**; y con 0 puntos, **3,0**. La nota final es la menor entre la nota base y ese límite.
 
-El CSV contiene una fila por integrante con posición, equipo, promedio, nota colectiva, nombre y puntos individuales. Incluye los equipos sin participantes con posición y nota vacías. Usa punto y coma como separador y coma decimal, para facilitar su apertura en Excel configurado en español. Las notas se calculan al descargar los resultados finales; no son notas individuales.
+El Excel contiene una hoja de resumen y otra con una fila por integrante; es editable y dispone de filtros. El PDF ofrece el mismo resumen y detalle para compartir o imprimir. Ambos incluyen posición, equipo, promedio, nota colectiva, nombre y puntos individuales; los equipos sin participantes aparecen sin posición ni nota. Las notas se calculan al descargar los resultados finales; no son notas individuales.
 
 ### Conexión y privacidad
 
@@ -58,4 +58,4 @@ No existe verificación de identidad ni un mecanismo para impedir que una person
 
 Instala Node.js y ejecuta `npm install`. Para compilar: `npm run build`. `npm run dev` inicia únicamente Vite y **no** ejecuta la API de Vercel; para probar el flujo completo localmente, configura un archivo `.env.local` basado en `.env.example` y usa `vercel dev` con Vercel CLI. No subas ese archivo.
 
-Antes de la presentación, prueba una partida completa con varios celulares y redes distintas, comprueba QR, lectura, tiempo, reconexión, puntajes, podio y CSV. Verifica los límites vigentes de Vercel y Supabase para el número esperado de participantes y solicitudes. La implementación no incluye actualizaciones Supabase Realtime: usa consultas periódicas, por lo que puede haber una pequeña demora visible.
+Antes de la presentación, prueba una partida completa con varios celulares y redes distintas, comprueba QR, lectura, tiempo, reconexión, puntajes, podio y descargas de Excel y PDF. Verifica los límites vigentes de Vercel y Supabase para el número esperado de participantes y solicitudes. La implementación no incluye actualizaciones Supabase Realtime: usa consultas periódicas, por lo que puede haber una pequeña demora visible.
