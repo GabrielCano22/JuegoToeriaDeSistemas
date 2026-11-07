@@ -33,8 +33,10 @@ También puedes utilizar Vercel CLI para desplegar; sigue sus instrucciones para
 1. El anfitrión entra con `HOST_PASSWORD`, crea la sala y proyecta el PIN y el QR.
 2. Los participantes escriben nombre, seleccionan equipo 1–8 y eligen personaje y color. En la sala de espera, el anfitrión puede retirar una inscripción errónea pulsando sobre su tarjeta. No se pueden retirar jugadores después de empezar, para no alterar los promedios.
 3. Al comenzar se muestra el escenario sin reloj. El anfitrión elige el tiempo y abre las respuestas. La pregunta permanece visible y el botón **Volver a leer el escenario** permite consultar el texto.
-4. Una respuesta enviada no se puede cambiar. El anfitrión puede cerrar anticipadamente la ronda; de lo contrario se cierra cuando se agota el tiempo. Se muestra la respuesta y la explicación, y el anfitrión avanza.
+4. Una respuesta enviada no se puede cambiar. La ronda se cierra automáticamente cuando todos responden o se agota el tiempo; el anfitrión también puede cerrarla antes. Se muestra la respuesta y la explicación, y el anfitrión avanza. Los jugadores desconectados siguen contando hasta que termine el tiempo.
 5. El podio muestra los equipos con participantes; la tabla muestra los ocho equipos y permite consultar sus integrantes. El anfitrión puede descargar los resultados en CSV.
+
+Durante las respuestas, el dispositivo del anfitrión reproduce una secuencia musical original generada en el navegador; se acelera en los últimos 10 segundos y se detiene al cerrar la ronda. El botón de música permite silenciarla. Si el navegador bloquea el audio o se recarga la página, pulsa el botón para activarlo. Conecta el computador del anfitrión a los parlantes y comprueba el volumen antes de comenzar; los celulares de los jugadores no reproducen la música.
 
 ### Puntos y empates
 

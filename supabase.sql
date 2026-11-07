@@ -35,6 +35,12 @@ begin
   if p_choice not between 0 and 2 then raise exception 'Opción inválida'; end if;
   score := case when p_choice = p_correct then greatest(500, round(1000 - 500 * elapsed / g.duration)::integer) else 0 end;
   insert into quiz_answers(game_id, player_id, question_index, choice, points) values(p_game, p_player, p_question, p_choice, score);
+  if not exists (
+    select 1 from quiz_players p where p.game_id = p_game and p.active = true
+    and not exists (select 1 from quiz_answers a where a.player_id = p.id and a.game_id = p_game and a.question_index = p_question)
+  ) then
+    update quiz_games set phase = 'result' where id = p_game and phase = 'answer' and question_index = p_question;
+  end if;
   return jsonb_build_object('ok', true);
 exception when unique_violation then raise exception 'Ya enviaste tu respuesta';
 end $$;

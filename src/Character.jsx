@@ -1,14 +1,22 @@
 import React from 'react';
 
 export const characterOptions = {
-  type: [{id:'person',label:'Persona',icon:'🙂'},{id:'robot',label:'Robot',icon:'🤖'},{id:'cat',label:'Gatito',icon:'🐱'},{id:'alien',label:'Alien',icon:'👽'}],
+  type: [{id:'person',label:'Persona'},{id:'robot',label:'Robot'},{id:'cat',label:'Gatito'},{id:'alien',label:'Alien'}],
   skin: [{id:'peach',label:'Durazno',color:'#f2b993'},{id:'brown',label:'Canela',color:'#b87856'},{id:'dark',label:'Chocolate',color:'#754938'},{id:'mint',label:'Menta',color:'#9ee4c8'},{id:'blue',label:'Cielo',color:'#a6c7eb'},{id:'lilac',label:'Lila',color:'#cbb8e9'}],
-  outfit: [{id:'shirt',label:'Camiseta',icon:'👕'},{id:'hoodie',label:'Buzo',icon:'🧥'},{id:'suit',label:'Elegante',icon:'👔'},{id:'star',label:'Estrella',icon:'⭐'}],
-  hat: [{id:'none',label:'Sin sombrero',icon:'✕'},{id:'cap',label:'Gorra',icon:'🧢'},{id:'beanie',label:'Gorro',icon:'🎩'},{id:'crown',label:'Corona',icon:'👑'},{id:'party',label:'Fiesta',icon:'🎉'}],
-  glasses: [{id:'none',label:'Sin lentes',icon:'✕'},{id:'round',label:'Redondos',icon:'👓'},{id:'sun',label:'De sol',icon:'🕶️'},{id:'star',label:'Estrella',icon:'⭐'}],
+  outfit: [{id:'shirt',label:'Camiseta'},{id:'hoodie',label:'Buzo'},{id:'suit',label:'Elegante'},{id:'star',label:'Estrella'}],
+  hat: [{id:'none',label:'Sin sombrero'},{id:'cap',label:'Gorra'},{id:'beanie',label:'Gorro'},{id:'crown',label:'Corona'},{id:'party',label:'Fiesta'}],
+  glasses: [{id:'none',label:'Sin lentes'},{id:'round',label:'Redondos'},{id:'sun',label:'De sol'},{id:'star',label:'Estrella'}],
   outfitColor: [{id:'teal',label:'Turquesa',color:'#35a997'},{id:'coral',label:'Coral',color:'#ec8e83'},{id:'gold',label:'Dorado',color:'#e4b65c'},{id:'purple',label:'Violeta',color:'#a88fd1'},{id:'navy',label:'Azul',color:'#607fb0'},{id:'pink',label:'Rosa',color:'#db93b4'}]
 };
 export const defaultCharacter = {type:'person',skin:'peach',outfit:'shirt',hat:'none',glasses:'none',outfitColor:'teal'};
+// Miniaturas vectoriales propias: no dependen de los emojis del dispositivo.
+for (const category of ['type','outfit','hat','glasses']) {
+  for (const option of characterOptions[category]) {
+    option.icon=option.id==='none'
+      ? <svg className="choice-svg" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" strokeWidth="3"/><path d="M15 15l18 18" fill="none" stroke="currentColor" strokeWidth="3"/></svg>
+      : <span className="choice-character" aria-hidden="true"><Character value={{...defaultCharacter,[category]:option.id}}/></span>;
+  }
+}
 export function parseCharacter(value) { try {const parsed=typeof value==='string'?JSON.parse(value):value; return Object.fromEntries(Object.entries(characterOptions).map(([key,options])=>[key,options.some(o=>o.id===parsed?.[key])?parsed[key]:defaultCharacter[key]]));} catch {return defaultCharacter} }
 export function Character({value, className=''}) {
   const c=parseCharacter(value), skin=characterOptions.skin.find(x=>x.id===c.skin).color, shirt=characterOptions.outfitColor.find(x=>x.id===c.outfitColor).color;
