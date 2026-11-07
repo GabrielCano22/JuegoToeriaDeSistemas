@@ -42,7 +42,11 @@ Durante las respuestas, el dispositivo del anfitrión reproduce una secuencia mu
 
 El servidor calcula **de 500 a 1.000 puntos** por respuesta correcta: 1.000 al inicio y una reducción lineal hasta 500 al final. Respuesta incorrecta, no enviada o recibida después del límite: 0. No hay bono de racha. Se utiliza la hora de recepción en el servidor; la latencia de cada conexión puede influir ligeramente.
 
-El puntaje de equipo es el promedio de los puntos acumulados por todos sus integrantes activos, redondeado al entero más cercano. Un jugador que se desconecte después de empezar sigue contando, incluso si no responde. Los equipos sin integrantes no compiten. En caso de empate en puntos redondeados, se muestran por número de equipo.
+El puntaje de equipo es el promedio de los puntos acumulados por todos sus integrantes activos, redondeado al entero más cercano. Un jugador que se desconecte después de empezar sigue contando, incluso si no responde. Los equipos sin integrantes no compiten ni reciben nota. Los equipos empatados en puntos redondeados comparten posición y nota; se usa clasificación de competición: por ejemplo, 1.º, 1.º, 3.º. El podio incluye a todos los equipos que ocupan las tres primeras posiciones.
+
+La nota base por posición es: 1.º **5,0**, 2.º **4,8**, 3.º **4,7**, 4.º **4,6**, 5.º **4,5**, 6.º **4,4**, 7.º **4,2** y 8.º **4,0**. Se aplica también un máximo según el promedio del equipo, incluso para el primer lugar: desde 2.000 puntos, sin límite adicional; de 1.500 a 1.999, **3,9**; de 1.000 a 1.499, **3,7**; de 500 a 999, **3,5**; de 1 a 499, **3,2**; y con 0 puntos, **3,0**. La nota final es la menor entre la nota base y ese límite.
+
+El CSV contiene una fila por integrante con posición, equipo, promedio, nota colectiva, nombre y puntos individuales. Incluye los equipos sin participantes con posición y nota vacías. Usa punto y coma como separador y coma decimal, para facilitar su apertura en Excel configurado en español. Las notas se calculan al descargar los resultados finales; no son notas individuales.
 
 ### Conexión y privacidad
 
