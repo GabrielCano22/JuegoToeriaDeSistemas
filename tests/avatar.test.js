@@ -29,5 +29,11 @@ test('opciones del editor coinciden con el servidor y los nuevos personajes se d
       const markup=renderToStaticMarkup(React.createElement(Character,{value:{...original,type,outfit:'stripes',hat:'wizard',glasses:'square'}}));
       assert.match(markup,/<svg/);assert.match(markup,/aria-label="Personaje/);assert.match(markup,/<rect/);
     }
+    const pair=renderToStaticMarkup(React.createElement('div',null,
+      React.createElement(Character,{value:{...original,skin:'peach',outfitColor:'red'}}),
+      React.createElement(Character,{value:{...original,skin:'mint',outfitColor:'green'}})));
+    const ids=[...pair.matchAll(/<radialGradient id="([^"]+)"/g)].map(match=>match[1]);
+    assert.equal(ids.length,2);assert.notEqual(ids[0],ids[1]);
+    assert.ok(ids.every(id=>pair.includes(`url(#${id})`)));
   } finally {await vite.close()}
 });
