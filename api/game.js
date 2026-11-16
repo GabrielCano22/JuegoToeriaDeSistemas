@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { randomInt, randomUUID, timingSafeEqual } from 'node:crypto';
 import { questions } from '../questions.js';
-import { rankTeams } from '../scores.js';
+import { rankTeams, PROFESSOR_TEAM } from '../scores.js';
 
 const equal = (a, b) => { const x = Buffer.from(String(a || '')), y = Buffer.from(String(b || '')); return x.length > 0 && x.length === y.length && timingSafeEqual(x, y); };
 const fail = (message, status = 400) => { const e = new Error(message); e.status = status; throw e; };
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       if (game.phase !== 'lobby') fail('La partida ya comenzó.');
       const name = String(b.name || '').trim().replace(/\s+/g,' ');
       const team = Number(b.team);
-      if (name.length < 1 || name.length > 24 || !Number.isInteger(team) || team < 1 || team > 8) fail('Revisa tu nombre y equipo.');
+      if (name.length < 1 || name.length > 24 || !Number.isInteger(team) || team < 1 || team > PROFESSOR_TEAM) fail('Revisa tu nombre y equipo.');
       let character;
       try { character = JSON.parse(b.avatar); } catch { fail('Personaje inválido.'); }
       const allowed={type:['person','robot','cat','alien'],skin:['peach','brown','dark','mint','blue','lilac'],outfit:['shirt','hoodie','suit','star'],hat:['none','cap','beanie','crown','party'],glasses:['none','round','sun','star'],outfitColor:['teal','coral','gold','purple','navy','pink']};
@@ -79,7 +79,8 @@ export default async function handler(req, res) {
     const reveal=game.phase === 'result' || game.phase === 'final';
     const safeQuestion=q && game.phase !== 'lobby' ? {title:q.title,scenario:q.scenario,question:q.question,options:q.options,...(reveal ? {correct:q.correct,explanation:q.explanation}:{})} : null;
     const totals=Object.fromEntries(players.map(p=>[p.id, answers.filter(a=>a.player_id===p.id && (reveal || a.question_index < game.question_index)).reduce((n,a)=>n+a.points,0)]));
-    const teams=rankTeams(Array.from({length:8},(_,i)=>{const members=players.filter(p=>p.team===i+1);return {team:i+1,count:members.length,points:members.length ? Math.round(members.reduce((n,p)=>n+(totals[p.id]||0),0)/members.length):0};}));
+    const teamIds=[1,2,3,4,5,6,7,8,...(players.some(p=>p.team===PROFESSOR_TEAM)?[PROFESSOR_TEAM]:[])];
+    const teams=rankTeams(teamIds.map(team=>{const members=players.filter(p=>p.team===team);return {team,count:members.length,points:members.length ? Math.round(members.reduce((n,p)=>n+(totals[p.id]||0),0)/members.length):0};}));
     const mine=player ? answers.find(a=>a.player_id===player.id && a.question_index===game.question_index) : null;
     const current=answers.filter(a=>a.question_index===game.question_index);
     return res.status(200).json({pin:game.pin,phase:game.phase,index:game.question_index,total:questions.length,startedAt:game.started_at,duration:game.duration,serverNow:new Date().toISOString(),question:safeQuestion,players:players.map(p=>({...p,points:totals[p.id]})),teams,answerCount:current.length,answered:!!mine,personal:reveal && mine ? {choice:mine.choice,points:mine.points} : null,counts:reveal ? [0,1,2].map(i=>current.filter(a=>a.choice===i).length) : null});

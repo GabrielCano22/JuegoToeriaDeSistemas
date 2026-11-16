@@ -12,7 +12,7 @@ Misión Decisiones es una actividad educativa desarrollada para la asignatura **
 
 El equipo anfitrión dirige una partida en vivo mientras los integrantes de los equipos participantes responden desde sus propios dispositivos. Cada persona acumula puntos individualmente y el resultado del equipo se calcula mediante un promedio, de modo que los equipos con diferente número de integrantes puedan competir en igualdad de condiciones.
 
-La actividad está preparada para **ocho equipos participantes**, un equipo anfitrión y seis preguntas. No se requieren cuentas para jugar.
+La actividad está preparada para **ocho equipos participantes**, un equipo anfitrión y seis preguntas. Opcionalmente, el profesor puede participar y competir por el podio sin recibir nota. No se requieren cuentas para jugar.
 
 ## Funcionalidades
 
@@ -23,6 +23,7 @@ La actividad está preparada para **ocho equipos participantes**, un equipo anfi
 - **Cierre automático:** la ronda termina cuando todos han respondido o cuando se agota el tiempo.
 - **Música dinámica:** secuencia original en el dispositivo del anfitrión, con mayor ritmo durante los últimos diez segundos y opción de silencio.
 - **Clasificación colectiva:** puntuación individual, promedio por equipo, empates compartidos y podio final.
+- **Participación del profesor:** se une opcionalmente, suma puntos y aparece en el podio general sin recibir nota ni afectar las notas de los equipos.
 - **Informes descargables:** Excel editable con estilos y filtros, y PDF listo para compartir o imprimir.
 - **Reconexión:** recuperación de la sesión en el mismo navegador si la página se recarga.
 - **Diseño adaptable:** vistas para el computador del anfitrión y los dispositivos de los participantes.
@@ -55,7 +56,7 @@ La música se reproduce únicamente en el dispositivo del anfitrión. Si el nave
 ### Participantes
 
 1. Entra mediante el enlace o el QR compartido por el anfitrión.
-2. Introduce el PIN si es necesario, escribe tu nombre, personaliza tu personaje y selecciona tu equipo.
+2. Introduce el PIN si es necesario, escribe tu nombre, personaliza tu personaje y selecciona tu equipo. El docente puede seleccionar **Profesor (sin nota)** si desea participar.
 3. Lee cada escenario y responde dentro del tiempo establecido. Si lo necesitas, utiliza **Volver a leer el escenario**.
 4. Una vez enviada, la respuesta no se puede modificar. Al finalizar cada ronda se muestra la respuesta correcta.
 
@@ -70,6 +71,7 @@ Si alguien se desconecta y no responde, la ronda no espera indefinidamente: term
 - El servidor valida el tiempo de recepción; la latencia de la conexión puede influir ligeramente.
 - El puntaje de cada equipo es el **promedio de los puntos acumulados por sus integrantes activos**, redondeado al entero más cercano.
 - Los equipos empatados en puntos redondeados comparten posición y nota. Se usa clasificación de competición: por ejemplo, **1.º, 1.º, 3.º**. Los equipos sin integrantes no compiten ni reciben nota.
+- Cuando participa, el profesor tiene puntos y puesto en la clasificación general y el podio, pero no recibe nota. Para calcular las notas se establece otra clasificación solo con los equipos 1–8; el profesor no desplaza sus puestos de calificación. Si no participa, no aparece en la clasificación ni en los informes.
 
 ### Nota base por posición
 
@@ -91,7 +93,7 @@ La nota final es la **menor** entre la nota base y el límite aplicable según e
 | 1–499 | 3,2 |
 | 0 | 3,0 |
 
-El límite se aplica también al primer lugar. La nota es **colectiva**, no individual. El Excel y el PDF incluyen posición, equipo, promedio, nota, integrantes y puntos individuales; los equipos sin participantes aparecen sin posición ni nota.
+El límite se aplica también al primer lugar de la clasificación para notas. La nota es **colectiva**, no individual. El Excel y el PDF incluyen puesto general, puesto para nota, equipo, promedio, nota, integrantes y puntos individuales; los equipos sin participantes aparecen sin posición ni nota, y el profesor aparece sin nota cuando participa.
 
 ## Estructura del proyecto
 
@@ -134,7 +136,7 @@ npm test
 3. El script crea las tablas `quiz_games`, `quiz_players`, `quiz_answers` y la función `quiz_submit`. Antes de ejecutarlo, verifica que el proyecto no tenga tablas existentes con esos nombres que deban conservarse.
 4. Obtén la URL del proyecto y su clave secreta **`service_role`** desde los ajustes de API. En algunas versiones del panel puede aparecer en **Legacy API keys**.
 
-Para una instalación anterior que ya tenga el esquema inicial, `supabase/close_when_answered.sql` actualiza la función de envío para habilitar el cierre automático cuando todos responden.
+Para una instalación anterior que ya tenga el esquema inicial, `supabase/close_when_answered.sql` actualiza la función de envío para habilitar el cierre automático cuando todos responden. `supabase/profesor.sql` amplía la restricción de equipos para permitir al profesor; verifica previamente que exista la restricción `quiz_players_team_check` y ejecuta la migración en una ventana sin partidas activas.
 
 ### 2. Configurar Vercel
 

@@ -1,4 +1,6 @@
 const positionGrades = [5.0, 4.8, 4.7, 4.6, 4.5, 4.4, 4.2, 4.0];
+export const PROFESSOR_TEAM = 9;
+export const teamName = team => Number(team) === PROFESSOR_TEAM ? 'Profesor' : `Equipo ${team}`;
 
 // Los empates usan el promedio ya redondeado que se muestra en la aplicación.
 export function rankTeams(teams) {
@@ -10,6 +12,11 @@ export function rankTeams(teams) {
     previousPoints=team.points; previousRank=rank;
     return {...team,rank};
   });
+}
+
+// La clasificación para notas excluye al profesor, sin afectar su puesto en el podio.
+export function rankForGrades(teams) {
+  return new Map(rankTeams(teams.filter(team=>team.team!==PROFESSOR_TEAM)).map(team=>[team.team,team.rank]));
 }
 
 export function teamGrade(rank, points) {

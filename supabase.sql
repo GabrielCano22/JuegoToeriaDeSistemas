@@ -8,7 +8,7 @@ create table if not exists public.quiz_games (
 );
 create table if not exists public.quiz_players (
   id uuid primary key default gen_random_uuid(), game_id uuid not null references public.quiz_games(id) on delete cascade,
-  token uuid not null default gen_random_uuid(), name text not null, team integer not null check (team between 1 and 8),
+  token uuid not null default gen_random_uuid(), name text not null, team integer not null check (team between 1 and 9),
   avatar text not null, color text not null, active boolean not null default true, created_at timestamptz not null default now()
 );
 create table if not exists public.quiz_answers (
