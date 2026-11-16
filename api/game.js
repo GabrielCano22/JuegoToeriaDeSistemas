@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { randomInt, randomUUID, timingSafeEqual } from 'node:crypto';
 import { questions } from '../questions.js';
 import { rankTeams, PROFESSOR_TEAM } from '../scores.js';
+import { validAvatar } from '../avatar-options.js';
 
 const equal = (a, b) => { const x = Buffer.from(String(a || '')), y = Buffer.from(String(b || '')); return x.length > 0 && x.length === y.length && timingSafeEqual(x, y); };
 const fail = (message, status = 400) => { const e = new Error(message); e.status = status; throw e; };
@@ -34,8 +35,7 @@ export default async function handler(req, res) {
       if (name.length < 1 || name.length > 24 || !Number.isInteger(team) || team < 1 || team > PROFESSOR_TEAM) fail('Revisa tu nombre y equipo.');
       let character;
       try { character = JSON.parse(b.avatar); } catch { fail('Personaje inválido.'); }
-      const allowed={type:['person','robot','cat','alien'],skin:['peach','brown','dark','mint','blue','lilac'],outfit:['shirt','hoodie','suit','star'],hat:['none','cap','beanie','crown','party'],glasses:['none','round','sun','star'],outfitColor:['teal','coral','gold','purple','navy','pink']};
-      if (!character || typeof character !== 'object' || Object.keys(character).length !== Object.keys(allowed).length || !Object.entries(allowed).every(([key,values])=>values.includes(character[key])) || !['mint','coral','gold','lavender'].includes(b.color)) fail('Personaje inválido.');
+      if (!validAvatar(character) || !['mint','coral','gold','lavender'].includes(b.color)) fail('Personaje inválido.');
       const player = await query(db.from('quiz_players').insert({game_id:game.id,name,team,avatar:b.avatar,color:b.color}).select('id,token').single());
       return res.status(200).json({playerId:player.id, playerToken:player.token});
     }

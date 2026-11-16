@@ -17,7 +17,7 @@ La actividad está preparada para **ocho equipos participantes**, un equipo anfi
 ## Funcionalidades
 
 - **Partidas en vivo:** acceso mediante enlace, código QR o PIN, sin necesidad de compartir la misma red.
-- **Personajes personalizables:** selección de personaje, colores, ropa, sombreros y lentes.
+- **Personajes personalizables:** personas, robots y animales, con variedad de colores, ropa, sombreros y lentes.
 - **Control del anfitrión:** creación de salas, revisión de participantes, inicio y avance de las rondas.
 - **Lectura accesible:** cada escenario se presenta sin temporizador y puede consultarse nuevamente durante la pregunta.
 - **Cierre automático:** la ronda termina cuando todos han respondido o cuando se agota el tiempo.
