@@ -1,14 +1,12 @@
-import {teamGrade, teamName, rankForGrades, PROFESSOR_TEAM} from '../scores.js';
+import {teamGrade, teamName, PROFESSOR_TEAM} from '../scores.js';
 
 // Modelo compartido por ambos informes. Un equipo vacío no recibe nota ni puntos.
 export function resultsData(game) {
-  const gradeRanks=rankForGrades(game.teams);
   return game.teams.map(team=>({
     position:team.rank ?? null,
     team:teamName(team.team),
     points:team.count ? team.points : null,
-    gradePosition:team.count && team.team!==PROFESSOR_TEAM ? gradeRanks.get(team.team) : null,
-    grade:team.count && team.team!==PROFESSOR_TEAM ? teamGrade(gradeRanks.get(team.team),team.points) : null,
+    grade:team.count && team.team!==PROFESSOR_TEAM ? teamGrade(team.points) : null,
     members:game.players.filter(player=>player.team===team.team).map(player=>({name:player.name,points:player.points}))
   }));
 }
@@ -54,17 +52,17 @@ export async function createResultsWorkbook(game) {
   workbook.created=new Date();
   const data=resultsData(game);
   const summary=workbook.addWorksheet('Resumen');
-  styleSheet(summary,[['Puesto general',17],['Equipo',20],['Puntos promedio',22],['Puesto para nota',20],['Nota del equipo',20],['Integrantes',15]],'MISIÓN DECISIONES · RESULTADOS','El puesto para nota excluye al profesor; el puesto general incluye a todos.');
-  for(const team of data) summary.addRow([team.position,team.team,team.points,team.gradePosition,team.grade,team.members.length]);
-  styleRows(summary,5);
+  styleSheet(summary,[['Puesto general',17],['Equipo',20],['Puntos promedio',22],['Nota del equipo',20],['Integrantes',15]],'MISIÓN DECISIONES · RESULTADOS','La nota depende del promedio de puntos; el profesor participa sin nota.');
+  for(const team of data) summary.addRow([team.position,team.team,team.points,team.grade,team.members.length]);
+  styleRows(summary,4);
   const detail=workbook.addWorksheet('Integrantes');
-  styleSheet(detail,[['Puesto general',17],['Equipo',20],['Puntos promedio',22],['Puesto para nota',20],['Nota del equipo',20],['Integrante',30],['Puntos individuales',22]],'MISIÓN DECISIONES · INTEGRANTES','El profesor participa sin nota; su puesto no modifica la nota de los equipos.');
+  styleSheet(detail,[['Puesto general',17],['Equipo',20],['Puntos promedio',22],['Nota del equipo',20],['Integrante',30],['Puntos individuales',22]],'MISIÓN DECISIONES · INTEGRANTES','La nota depende del promedio de puntos; el profesor participa sin nota.');
   for(const team of data) {
-    const common=[team.position,team.team,team.points,team.gradePosition,team.grade];
+    const common=[team.position,team.team,team.points,team.grade];
     if(!team.members.length) detail.addRow([...common,'Sin participantes',null]);
     else for(const member of team.members) detail.addRow([...common,member.name,member.points]);
   }
-  styleRows(detail,5);
+  styleRows(detail,4);
   return workbook;
 }
 
@@ -76,15 +74,15 @@ export async function createResultsPdf(game) {
   doc.setFillColor(23,51,68);doc.rect(0,0,210,35,'F');
   doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);doc.setFontSize(19);doc.text('MISIÓN DECISIONES',14,15);
   doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(190,242,218);doc.text('Informe de resultados y notas por equipo',14,23);
-  doc.setTextColor(38,61,70);doc.setFontSize(9);doc.text('Puesto general: incluye al profesor. Puesto para nota: solo equipos.',14,43);
-  doc.text('Los equipos empatados comparten posición y nota.',14,48);
+  doc.setTextColor(38,61,70);doc.setFontSize(9);doc.text('La nota depende del promedio de puntos, no de la posición.',14,43);
+  doc.text('El profesor participa sin nota. Los equipos empatados comparten posición.',14,48);
   const options={theme:'grid',margin:{left:14,right:14},styles:{font:'helvetica',fontSize:9,cellPadding:2.5,textColor:[28,52,60],lineColor:[213,229,224],lineWidth:.15,overflow:'linebreak'},headStyles:{fillColor:[40,83,106],textColor:255,fontStyle:'bold'},alternateRowStyles:{fillColor:[242,249,246]},rowPageBreak:'avoid'};
-  autoTable(doc,{...options,startY:52,head:[['Puesto general','Equipo','Puntos promedio','Puesto para nota','Nota','Integrantes']],body:data.map(t=>[format(t.position),t.team,format(t.points),format(t.gradePosition),grade(t.grade),String(t.members.length)])});
+  autoTable(doc,{...options,startY:52,head:[['Puesto general','Equipo','Puntos promedio','Nota','Integrantes']],body:data.map(t=>[format(t.position),t.team,format(t.points),grade(t.grade),String(t.members.length)])});
   let y=doc.lastAutoTable.finalY+12;
   if(y>250){doc.addPage();y=20}
   doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(23,51,68);doc.text('Detalle de integrantes',14,y);
-  const details=data.flatMap(t=>t.members.length ? t.members.map(m=>[format(t.position),t.team,format(t.points),format(t.gradePosition),grade(t.grade),m.name,format(m.points)]) : [[format(t.position),t.team,format(t.points),format(t.gradePosition),grade(t.grade),'Sin participantes','-']]);
-  autoTable(doc,{...options,startY:y+5,head:[['Puesto','Equipo','Promedio','Puesto nota','Nota','Integrante','Puntos']],body:details,columnStyles:{0:{cellWidth:15},1:{cellWidth:24},2:{cellWidth:22},3:{cellWidth:22},4:{cellWidth:14},5:{cellWidth:64},6:{cellWidth:21}}});
+  const details=data.flatMap(t=>t.members.length ? t.members.map(m=>[format(t.position),t.team,format(t.points),grade(t.grade),m.name,format(m.points)]) : [[format(t.position),t.team,format(t.points),grade(t.grade),'Sin participantes','-']]);
+  autoTable(doc,{...options,startY:y+5,head:[['Puesto','Equipo','Promedio','Nota','Integrante','Puntos']],body:details,columnStyles:{0:{cellWidth:15},1:{cellWidth:24},2:{cellWidth:26},3:{cellWidth:16},4:{cellWidth:77},5:{cellWidth:24}}});
   const total=doc.getNumberOfPages();
   for(let page=1;page<=total;page++){doc.setPage(page);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(110,130,135);doc.text(`Misión Decisiones · Página ${page} de ${total}`,14,288);}
   return doc;

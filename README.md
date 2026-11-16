@@ -71,29 +71,24 @@ Si alguien se desconecta y no responde, la ronda no espera indefinidamente: term
 - El servidor valida el tiempo de recepción; la latencia de la conexión puede influir ligeramente.
 - El puntaje de cada equipo es el **promedio de los puntos acumulados por sus integrantes activos**, redondeado al entero más cercano.
 - Los equipos empatados en puntos redondeados comparten posición y nota. Se usa clasificación de competición: por ejemplo, **1.º, 1.º, 3.º**. Los equipos sin integrantes no compiten ni reciben nota.
-- Cuando participa, el profesor tiene puntos y puesto en la clasificación general y el podio, pero no recibe nota. Para calcular las notas se establece otra clasificación solo con los equipos 1–8; el profesor no desplaza sus puestos de calificación. Si no participa, no aparece en la clasificación ni en los informes.
+- Cuando participa, el profesor tiene puntos y puesto en la clasificación general y el podio, pero no recibe nota. La presencia del profesor no afecta las notas de los equipos, pues estas dependen únicamente de sus puntos promedio. Si no participa, no aparece en la clasificación ni en los informes.
 
-### Nota base por posición
+### Nota por puntos promedio
 
-| Posición | Nota base | Posición | Nota base |
-| --- | ---: | --- | ---: |
-| 1.º | 5,0 | 5.º | 4,5 |
-| 2.º | 4,8 | 6.º | 4,4 |
-| 3.º | 4,7 | 7.º | 4,2 |
-| 4.º | 4,6 | 8.º | 4,0 |
+La nota colectiva depende únicamente del **promedio de puntos redondeado** de cada equipo; la posición en el podio no modifica la calificación.
 
-La nota final es la **menor** entre la nota base y el límite aplicable según el puntaje promedio del equipo:
-
-| Puntos promedio | Nota máxima permitida |
+| Puntos promedio | Nota |
 | --- | ---: |
-| 2.000 o más | Sin límite adicional |
-| 1.500–1.999 | 3,9 |
-| 1.000–1.499 | 3,7 |
-| 500–999 | 3,5 |
-| 1–499 | 3,2 |
-| 0 | 3,0 |
+| 0–2.499 | 2,5 |
+| 2.500–2.999 | 2,8 |
+| 3.000–3.499 | 3,0 |
+| 3.500–3.999 | 3,5 |
+| 4.000–4.499 | 4,0 |
+| 4.500–4.999 | 4,5 |
+| 5.000–5.499 | 4,8 |
+| 5.500–6.000 | 5,0 |
 
-El límite se aplica también al primer lugar de la clasificación para notas. La nota es **colectiva**, no individual. El Excel y el PDF incluyen puesto general, puesto para nota, equipo, promedio, nota, integrantes y puntos individuales; los equipos sin participantes aparecen sin posición ni nota, y el profesor aparece sin nota cuando participa.
+Un equipo con integrantes y cero puntos recibe 2,5. Los equipos sin participantes y el profesor no reciben nota. El Excel y el PDF incluyen puesto general, equipo, promedio, nota, integrantes y puntos individuales; no muestran un puesto para nota porque la posición no se usa para calificar.
 
 ## Estructura del proyecto
 

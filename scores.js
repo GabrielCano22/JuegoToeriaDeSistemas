@@ -1,4 +1,3 @@
-const positionGrades = [5.0, 4.8, 4.7, 4.6, 4.5, 4.4, 4.2, 4.0];
 export const PROFESSOR_TEAM = 9;
 export const teamName = team => Number(team) === PROFESSOR_TEAM ? 'Profesor' : `Equipo ${team}`;
 
@@ -14,13 +13,15 @@ export function rankTeams(teams) {
   });
 }
 
-// La clasificación para notas excluye al profesor, sin afectar su puesto en el podio.
-export function rankForGrades(teams) {
-  return new Map(rankTeams(teams.filter(team=>team.team!==PROFESSOR_TEAM)).map(team=>[team.team,team.rank]));
-}
-
-export function teamGrade(rank, points) {
-  if (!Number.isInteger(rank) || rank < 1 || rank > positionGrades.length || !Number.isFinite(points) || points < 0) return null;
-  const maximum = points >= 2000 ? 5 : points >= 1500 ? 3.9 : points >= 1000 ? 3.7 : points >= 500 ? 3.5 : points > 0 ? 3.2 : 3.0;
-  return Math.min(positionGrades[rank-1],maximum);
+// La nota depende exclusivamente de los puntos promedio redondeados del equipo.
+export function teamGrade(points) {
+  if (!Number.isInteger(points) || points < 0 || points > 6000) return null;
+  if (points >= 5500) return 5;
+  if (points >= 5000) return 4.8;
+  if (points >= 4500) return 4.5;
+  if (points >= 4000) return 4;
+  if (points >= 3500) return 3.5;
+  if (points >= 3000) return 3;
+  if (points >= 2500) return 2.8;
+  return 2.5;
 }
