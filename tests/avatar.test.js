@@ -29,6 +29,13 @@ test('opciones del editor coinciden con el servidor y los nuevos personajes se d
       const markup=renderToStaticMarkup(React.createElement(Character,{value:{...original,type,outfit:'stripes',hat:'wizard',glasses:'square'}}));
       assert.match(markup,/<svg/);assert.match(markup,/aria-label="Personaje/);assert.match(markup,/<rect/);
     }
+    for(const expression of avatarValues.expression) {
+      const dog=renderToStaticMarkup(React.createElement(Character,{value:{...original,type:'dog',expression,hat:'cap',glasses:'round'}}));
+      assert.match(dog,/data-part="dog-ears"/);assert.match(dog,/data-part="dog-muzzle"/);
+      assert.match(dog,/aria-label="Personaje Perrito"/);
+    }
+    const cat=renderToStaticMarkup(React.createElement(Character,{value:{...original,type:'cat'}}));
+    assert.doesNotMatch(cat,/data-part="dog-muzzle"/);
     const pair=renderToStaticMarkup(React.createElement('div',null,
       React.createElement(Character,{value:{...original,skin:'peach',outfitColor:'red'}}),
       React.createElement(Character,{value:{...original,skin:'mint',outfitColor:'green'}})));
